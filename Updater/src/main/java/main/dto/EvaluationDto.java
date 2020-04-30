@@ -1,4 +1,4 @@
-package ae.updater.dtos.data.storage;
+package main.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -12,4 +12,5 @@ public class EvaluationDto {
     private String description;
     private String startsFrom;
     private String lastNeeded;
+    private String hash;
 }

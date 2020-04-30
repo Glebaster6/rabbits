@@ -35,6 +35,9 @@ public class Facility {
     @OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
     private List<CommodityGroupCharacteristic> commodityGroupCharacteristics;
 
+    @OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
+    private List<Evaluation> evaluations;
+
     private Instant created_at;
 
     private Instant updated_at;

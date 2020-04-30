@@ -20,19 +20,13 @@ public class AgregatorListener {
     @SneakyThrows
     @RabbitListener(queues = "agregatorToUpdaterQueue")
     public void listen(byte[] in) {
-        ByteArrayInputStream bis = new ByteArrayInputStream(in);
-        ObjectInputStream ois = new ObjectInputStream(bis);
-        MainDto mainDto = (MainDto) ois.readObject();
+        MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
 
         if (mainDto.getAction().equals(MainDto.Action.PARSE_EXCEL)){
             if (mainDto.getFile().length > 0){
                 String path = "src/main/resources/temp/" + Instant.now().toString() + ".xlsx";
-                File file = new File(path);
-                OutputStream os = new FileOutputStream(file);
-                os.write(mainDto.getFile());
-                os.close();
-
-
+                MainUtil.byteArrayToFile(path, mainDto.getFile());
+                excelDataReader.readData(new File(path), mainDto.getJson());
             }
         }
     }

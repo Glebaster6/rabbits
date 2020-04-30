@@ -34,6 +34,10 @@ public class Evaluation {
 
     private Instant updated_at;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "facility_id")
+    private Facility facility;
+
     @PrePersist
     private void onCreate() {
         created_at = Instant.now();

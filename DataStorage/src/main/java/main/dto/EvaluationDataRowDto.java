@@ -1,4 +1,4 @@
-package ae.updater.dtos.data.storage;
+package main.dto;
 
 import lombok.Builder;
 import lombok.Data;

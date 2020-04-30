@@ -19,13 +19,13 @@ public class Runner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        File file = new File("src/main/resources/commodity_groups.xlsx");
-        MainDto mainDto = MainDto.builder()
-                .file(IOUtils.toByteArray(new FileInputStream(file)))
-                .action(MainDto.Action.PARSE_EXCEL)
-                .json("")
-                .build();
-
-        rabbitTemplate.convertAndSend("agregatorToUpdaterQueue", MainUtil.objectToByteArray(mainDto));
+//        File file = new File("src/main/resources/commodity_groups.xlsx");
+//        MainDto mainDto = MainDto.builder()
+//                .file(IOUtils.toByteArray(new FileInputStream(file)))
+//                .action(MainDto.Action.PARSE_EXCEL)
+//                .json("")
+//                .build();
+//
+//        rabbitTemplate.convertAndSend("agregatorToUpdaterQueue", MainUtil.objectToByteArray(mainDto));
     }
 }

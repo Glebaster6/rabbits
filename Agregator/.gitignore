@@ -1,0 +1,12 @@
+.idea
+/.idea
+/target
+target
+
+### front ###
+/src/main/resources/static/
+/src/main/resources/templates/
+/src/main/resources/node_modules/
+/src/main/resources/package-lock.json
+
+.DS_Store

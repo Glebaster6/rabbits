@@ -1,9 +1,8 @@
 package ae.updater.utils;
 
-import ae.updater.dtos.data.storage.EvaluationDataDto;
-import ae.updater.dtos.data.storage.EvaluationDataRowDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import main.dto.*;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +27,22 @@ public class ExcelDataReader {
     }
 
     @SneakyThrows
-    public void readData(File file){
+    public void readData(File file, String evaluationData){
         Workbook workbook = WorkbookFactory.create(file);
         int sheetsNum = workbook.getNumberOfSheets();
 
+        EvaluationDto evaluationDto = (EvaluationDto) MainUtil.stringJsonToObject(evaluationData, EvaluationDto.class);
+
+
+        MainDto mainDto = MainDto.builder()
+                .action(MainDto.Action.SAVE_EVALUATION)
+                .json(MainUtil.objectToJsonString(evaluationData))
+                .build();
+        rabbitTemplate.convertAndSend("updaterToDataStorageQueue", MainUtil.objectToByteArray(mainDto));
+
         for (int i = 0; i < sheetsNum; i++){
             Sheet sheet = workbook.getSheetAt(i);
-            readCGFromSheet(sheet, i + 1);
+            readCGFromSheet(sheet, i + 1, evaluationDto.getHash());
         }
     }
 
@@ -45,7 +53,7 @@ public class ExcelDataReader {
      * @param period
      */
     @SneakyThrows
-    private void readCGFromSheet(Sheet sheet, int period) {
+    private void readCGFromSheet(Sheet sheet, int period, String hash) {
         int firstRowNum = sheet.getFirstRowNum();
         int lastRowNum = sheet.getLastRowNum();
 
@@ -58,21 +66,14 @@ public class ExcelDataReader {
             if (checkIfRowCorrect(row)) {
                 rowData.add(createCommodityGroup(row, period));
                 if (rowData.size() >= 200){
-                    EvaluationDataDto evaluationDataDto = EvaluationDataDto.builder()
-                            .evaluationDataRows(rowData)
-                            .build();
-                    rabbitTemplate.convertAndSend("updaterToDataStorageQueue", evaluationDataDto);
+                   sendRowData(rowData,hash);
                     rowData = new ArrayList<>();
                 }
             }
         }
 
         if (rowData.size() != 0){
-            EvaluationDataDto evaluationDataDto = EvaluationDataDto.builder()
-                    .evaluationDataRows(rowData)
-                    .build();
-            ObjectMapper objectMapper = new ObjectMapper();
-            rabbitTemplate.convertAndSend("updaterToDataStorageQueue", objectMapper.writeValueAsString(evaluationDataDto));
+            sendRowData(rowData,hash);
         }
     }
 
@@ -179,5 +180,25 @@ public class ExcelDataReader {
      */
     private Double getDoubleValue(Row row, String key) {
         return row.getCell(nameIndexMap.get(key)).getNumericCellValue();
+    }
+
+    /**
+     *
+     * @param rowData
+     * @param hash
+     */
+    private void sendRowData(List<EvaluationDataRowDto> rowData, String hash){
+        EvaluationDataDto evaluationDataDto = EvaluationDataDto.builder()
+                .evaluationDataRows(rowData)
+                .hash(hash)
+                .isLast(false)
+                .build();
+
+        MainDto mainDto = MainDto.builder()
+                .json(MainUtil.objectToJsonString(evaluationDataDto))
+                .action(MainDto.Action.SAVE_EVALUATION_DATA)
+                .build();
+
+        rabbitTemplate.convertAndSend("updaterToDataStorageQueue", MainUtil.objectToByteArray(mainDto));
     }
 }
