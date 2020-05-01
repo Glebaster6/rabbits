@@ -36,7 +36,7 @@ public class ExcelDataReader {
 
         MainDto mainDto = MainDto.builder()
                 .action(MainDto.Action.SAVE_EVALUATION)
-                .json(MainUtil.objectToJsonString(evaluationData))
+                .json(MainUtil.objectToJsonString(evaluationDto))
                 .build();
         rabbitTemplate.convertAndSend("updaterToDataStorageQueue", MainUtil.objectToByteArray(mainDto));
 
@@ -44,6 +44,8 @@ public class ExcelDataReader {
             Sheet sheet = workbook.getSheetAt(i);
             readCGFromSheet(sheet, i + 1, evaluationDto.getHash());
         }
+
+        file.delete();
     }
 
     /**
@@ -66,15 +68,13 @@ public class ExcelDataReader {
             if (checkIfRowCorrect(row)) {
                 rowData.add(createCommodityGroup(row, period));
                 if (rowData.size() >= 200){
-                   sendRowData(rowData,hash);
+                   sendRowData(rowData,hash, false);
                     rowData = new ArrayList<>();
                 }
             }
         }
 
-        if (rowData.size() != 0){
-            sendRowData(rowData,hash);
-        }
+            sendRowData(rowData,hash, true);
     }
 
     /**
@@ -187,9 +187,10 @@ public class ExcelDataReader {
      * @param rowData
      * @param hash
      */
-    private void sendRowData(List<EvaluationDataRowDto> rowData, String hash){
+    private void sendRowData(List<EvaluationDataRowDto> rowData, String hash, Boolean isLast){
         EvaluationDataDto evaluationDataDto = EvaluationDataDto.builder()
                 .evaluationDataRows(rowData)
+                .isLast(isLast)
                 .hash(hash)
                 .isLast(false)
                 .build();

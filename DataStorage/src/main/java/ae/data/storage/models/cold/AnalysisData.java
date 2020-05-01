@@ -13,7 +13,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 import java.time.Instant;
 import java.util.UUID;
 
-@Table
+@Table(value = "analysis_data")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,7 +33,10 @@ public class AnalysisData {
     private Long facilityId;
 
     @Column
-    private Long evaluationId;
+    private String evaluationName;
+
+    @Column
+    private String evaluationDescription;
 
     @Column
     private Long commodityGroupId;
@@ -45,10 +48,10 @@ public class AnalysisData {
     private Integer period;
 
     @Column
-    private Float revenue;
+    private Double revenue;
 
     @Column
-    private Float consumption;
+    private Double consumption;
 
     @Column
     private Long volumeOfSales;

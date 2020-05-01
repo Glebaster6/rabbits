@@ -5,15 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EvaluationDataDto implements Serializable {
-    private List<EvaluationDataRowDto> evaluationDataRows;
+public class EvaluationDto {
+    private Long id;
+    private Long facilityId;
+    private String name;
+    private String description;
+    private String startsFrom;
+    private String lastNeeded;
     private String hash;
-    private Boolean isLast;
 }

@@ -22,12 +22,17 @@ public class AgregatorListener {
     public void listen(byte[] in) {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
 
-        if (mainDto.getAction().equals(MainDto.Action.PARSE_EXCEL)){
-            if (mainDto.getFile().length > 0){
-                String path = "src/main/resources/temp/" + Instant.now().toString() + ".xlsx";
-                MainUtil.byteArrayToFile(path, mainDto.getFile());
-                excelDataReader.readData(new File(path), mainDto.getJson());
+        try {
+            if (mainDto.getAction().equals(MainDto.Action.PARSE_EXCEL)) {
+                if (mainDto.getFile().length > 0) {
+                    String path = "src/main/resources/temp/" + Instant.now().toString() + ".xlsx";
+                    MainUtil.byteArrayToFile(path, mainDto.getFile());
+                    excelDataReader.readData(new File(path), mainDto.getJson());
+                }
             }
+
+        } catch (Exception e){
+            System.out.println(e.toString());
         }
     }
 }

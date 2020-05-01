@@ -13,7 +13,7 @@ public class MainProducerListener {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @RabbitListener(queues = "updaterToDataStorageQueue")
+    @RabbitListener(queues = "mainProducerToAgregatorQueue")
     public void listen(byte[] in) {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
         switch (mainDto.getAction()){

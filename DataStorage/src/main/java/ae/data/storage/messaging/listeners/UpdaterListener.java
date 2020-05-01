@@ -17,15 +17,19 @@ public class UpdaterListener {
     public void listen(byte[] in) {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
 
-        switch(mainDto.getAction()){
-            case SAVE_EVALUATION:{
-              evaluationService.saveEvaluation(mainDto);
-                break;
+        try {
+            switch (mainDto.getAction()) {
+                case SAVE_EVALUATION: {
+                    evaluationService.saveEvaluation(mainDto);
+                    break;
+                }
+                case SAVE_EVALUATION_DATA: {
+                    evaluationService.saveEvaluationData(mainDto);
+                    break;
+                }
             }
-            case SAVE_EVALUATION_DATA:{
-                evaluationService.saveEvaluationData(mainDto);
-                break;
-            }
+        } catch (Exception e){
+            System.out.println(e.toString());
         }
     }
 }
