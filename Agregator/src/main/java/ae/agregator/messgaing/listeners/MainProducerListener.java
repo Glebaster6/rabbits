@@ -17,6 +17,8 @@ public class MainProducerListener {
     public void listen(byte[] in) {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
         switch (mainDto.getAction()){
+            case LOGIN:
+            case REGISTER:
             case PARSE_EXCEL:{
                 rabbitTemplate.convertAndSend("agregatorToUpdaterQueue", MainUtil.objectToByteArray(mainDto));
                 break;

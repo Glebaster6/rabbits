@@ -1,8 +1,8 @@
 package ae.data.storage.messaging.listeners;
 
 import ae.data.storage.services.evaluation.EvaluationService;
-import main.dto.MainDto;
-import main.dto.MainUtil;
+import ae.data.storage.services.user.UserService;
+import main.dto.*;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,6 +12,9 @@ public class UpdaterListener {
 
     @Autowired
     private EvaluationService evaluationService;
+
+    @Autowired
+    private UserService userService;
 
     @RabbitListener(queues = "updaterToDataStorageQueue")
     public void listen(byte[] in) {
@@ -27,8 +30,33 @@ public class UpdaterListener {
                     evaluationService.saveEvaluationData(mainDto);
                     break;
                 }
+                case LOGIN: {
+                    userService.login((LoginDto)
+                            MainUtil.stringJsonToObject(
+                                    mainDto.getJson(),
+                                    LoginDto.class)
+                    );
+                    break;
+                }
+                case REGISTER: {
+                    userService.register(
+                            (RegistrationDto) MainUtil.stringJsonToObject(
+                                    mainDto.getJson(),
+                                    RegistrationDto.class
+                            )
+                    );
+                    break;
+                }
+                case GET_FACILITY_DATA: {
+                    evaluationService.getFacilityData(
+                            (GetFacilityDataDto) MainUtil.stringJsonToObject(
+                                    mainDto.getJson(),
+                                    GetFacilityDataDto.class
+                            )
+                    );
+                }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.toString());
         }
     }

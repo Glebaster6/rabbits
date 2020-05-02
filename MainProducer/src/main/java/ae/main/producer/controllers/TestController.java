@@ -1,18 +1,25 @@
 package ae.main.producer.controllers;
 
+import main.dto.GetDataDto;
+import main.dto.SendDataDto;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.util.HtmlUtils;
-
-import javax.websocket.Session;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-@RequestMapping("/test")
 public class TestController {
-    @RequestMapping("/websocket")
-    public String getWebSocket() {
-        return "ws-broadcast";
+
+    @GetMapping("/test")
+    public String test(){
+        return "test";
     }
+
+    @MessageMapping("/getData")
+    @SendTo("/topic/sendData")
+    public SendDataDto greeting(GetDataDto message) throws Exception {
+        Thread.sleep(1000); // simulated delay
+        return new SendDataDto();
+    }
+
 }

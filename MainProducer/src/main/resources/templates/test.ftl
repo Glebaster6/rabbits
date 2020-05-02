@@ -1,65 +1,19 @@
 <#ftl encoding='UTF-8'>
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <title>Hello WebSocket</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
+          id="bootstrap-css">
+<#--    <link href="/main.css" rel="stylesheet">-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/js/app.js"></script>
 </head>
-<body>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script>
-    var stompClient = null;
-
-    function setConnected(connected) {
-        $("#connect").prop("disabled", connected);
-        $("#disconnect").prop("disabled", !connected);
-        if (connected) {
-            $("#conversation").show();
-        }
-        else {
-            $("#conversation").hide();
-        }
-        $("#greetings").html("");
-    }
-
-    function connect() {
-        var socket = new SockJS('/gs-guide-websocket');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
-            setConnected(true);
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/greetings', function (greeting) {
-                showGreeting(JSON.parse(greeting.body).content);
-            });
-        });
-    }
-
-    function disconnect() {
-        if (stompClient !== null) {
-            stompClient.disconnect();
-        }
-        setConnected(false);
-        console.log("Disconnected");
-    }
-
-    function sendName() {
-        stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
-    }
-
-    function showGreeting(message) {
-        $("#greetings").append("<tr><td>" + message + "</td></tr>");
-    }
-
-    $(function () {
-        $("form").on('submit', function (e) {
-            e.preventDefault();
-        });
-        $( "#connect" ).click(function() { connect(); });
-        $( "#disconnect" ).click(function() { disconnect(); });
-        $( "#send" ).click(function() { sendName(); });
-    });
-</script>
+<body onload="connect()">
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
         enabled. Please enable
         Javascript and reload this page!</h2></noscript>

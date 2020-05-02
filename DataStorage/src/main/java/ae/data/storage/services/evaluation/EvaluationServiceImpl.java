@@ -133,4 +133,9 @@ public class EvaluationServiceImpl implements EvaluationService {
             dataMapperRepository.delete(data);
         }
     }
+
+    @Override
+    public void getFacilityData(GetFacilityDataDto getFacilityDataDto) {
+        Facility facility = facilityRepository.findById(getFacilityDataDto.getFacilityId()).get();
+    }
 }

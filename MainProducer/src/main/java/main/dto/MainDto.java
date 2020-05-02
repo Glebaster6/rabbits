@@ -13,7 +13,17 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class MainDto implements Serializable {
     public enum Action {
-        LOGIN,PARSE_EXCEL,LOGOUT,ANALYZE_MARKET, ANALYZE_NEURAL, GET_ALL_USERS, REGISTER, SAVE_EVALUATION, SAVE_EVALUATION_DATA
+        LOGIN,
+        PARSE_EXCEL,
+        LOGOUT,
+        ANALYZE_MARKET,
+        ANALYZE_NEURAL,
+        GET_ALL_USERS,
+        REGISTER,
+        SAVE_EVALUATION,
+        SAVE_EVALUATION_DATA,
+        GET_FACILITY_DATA,
+        RETURN_FACILITY_DATA
     }
 
     private Action action;
