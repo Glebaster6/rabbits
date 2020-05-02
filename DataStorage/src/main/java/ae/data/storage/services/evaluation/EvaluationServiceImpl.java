@@ -15,6 +15,7 @@ import ae.data.storage.repositories.redis.DataMapperRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import main.dto.*;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class EvaluationServiceImpl implements EvaluationService {
@@ -47,6 +49,9 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Autowired
     private AnalysisDataRepository analysisDataRepository;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
 
     @Override
@@ -137,5 +142,29 @@ public class EvaluationServiceImpl implements EvaluationService {
     @Override
     public void getFacilityData(GetFacilityDataDto getFacilityDataDto) {
         Facility facility = facilityRepository.findById(getFacilityDataDto.getFacilityId()).get();
+        List<Evaluation> evaluations = facility.getEvaluations();
+
+        List<EvaluationRowDataDto> dataRows = evaluations.stream().map(evaluation -> {
+            return EvaluationRowDataDto.builder()
+                    .evaluationId(evaluation.getId())
+                    .evaluationName(evaluation.getName())
+                    .createdAt(evaluation.getCreated_at().toString())
+                    .build();
+        }).collect(Collectors.toList());
+
+        ReturnFacilityDataDto returnFacilityDataDto = ReturnFacilityDataDto.builder()
+                .facilityId(facility.getId())
+                .facilityName(facility.getName())
+                .facilityDescription(facility.getDescription())
+                .evaluations(dataRows)
+                .sessionId(getFacilityDataDto.getSessionId())
+                .build();
+
+        MainDto mainDto = MainDto.builder()
+                .action(MainDto.Action.RETURN_FACILITY_DATA)
+                .json(MainUtil.objectToJsonString(returnFacilityDataDto))
+                .build();
+
+        rabbitTemplate.convertAndSend("dataStorageToUpdaterQueue", MainUtil.objectToByteArray(mainDto));
     }
 }
