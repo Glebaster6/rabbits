@@ -22,23 +22,23 @@ public class Runner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        File file = new File("src/main/resources/commodity_groups.xlsx");
-        String hash = RandomStringUtils.randomAscii(15);
-
-        MainDto mainDto = MainDto.builder()
-                .file(IOUtils.toByteArray(new FileInputStream(file)))
-                .action(MainDto.Action.PARSE_EXCEL)
-                .json(MainUtil.objectToJsonString(EvaluationDto.builder()
-                        .name("test")
-                        .description("for test")
-                        .startsFrom("2018-02-01")
-                        .facilityId(1L)
-                        .hash(hash)
-                        .lastNeeded("2018-02-01")
-                        .id(1L)
-                        .build()))
-                .build();
-
-        rabbitTemplate.convertAndSend("mainProducerToAgregatorQueue", MainUtil.objectToByteArray(mainDto));
+//        File file = new File("src/main/resources/commodity_groups.xlsx");
+//        String hash = RandomStringUtils.randomAscii(15);
+//
+//        MainDto mainDto = MainDto.builder()
+//                .file(IOUtils.toByteArray(new FileInputStream(file)))
+//                .action(MainDto.Action.PARSE_EXCEL)
+//                .json(MainUtil.objectToJsonString(EvaluationDto.builder()
+//                        .name("test")
+//                        .description("for test")
+//                        .startsFrom("2018-02-01")
+//                        .facilityId(1L)
+//                        .hash(hash)
+//                        .lastNeeded("2018-02-01")
+//                        .id(1L)
+//                        .build()))
+//                .build();
+//
+//        rabbitTemplate.convertAndSend("mainProducerToAgregatorQueue", MainUtil.objectToByteArray(mainDto));
     }
 }
