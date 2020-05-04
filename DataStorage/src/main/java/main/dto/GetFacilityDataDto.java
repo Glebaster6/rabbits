@@ -12,6 +12,5 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetFacilityDataDto implements Serializable {
-    private String sessionId;
     private Long facilityId;
 }

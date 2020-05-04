@@ -19,8 +19,15 @@ public class MainProducerListener {
         switch (mainDto.getAction()){
             case LOGIN:
             case REGISTER:
+            case GET_FACILITY_DATA:
+            case DELETE_EVALUATION:
+            case GET_EVALUATION_DATA:
             case PARSE_EXCEL:{
                 rabbitTemplate.convertAndSend("agregatorToUpdaterQueue", MainUtil.objectToByteArray(mainDto));
+                break;
+            }
+            case RETURN_COMMODITY_GROUP_RESULT:{
+                rabbitTemplate.convertAndSend("agregatorToMarketAnalysisQueue", MainUtil.objectToByteArray(mainDto));
                 break;
             }
         }

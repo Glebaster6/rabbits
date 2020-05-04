@@ -14,5 +14,7 @@ public class UserData {
     private String password;
     private Boolean isCorrect;
     private String role;
+    private Long userId;
+    private Long facilityId;
     private Instant lastUsed;
 }

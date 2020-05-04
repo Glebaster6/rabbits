@@ -52,8 +52,28 @@ public class UpdaterListener {
                             (GetFacilityDataDto) MainUtil.stringJsonToObject(
                                     mainDto.getJson(),
                                     GetFacilityDataDto.class
+                            ),
+                            mainDto.getUser()
+                    );
+                }
+                case DELETE_EVALUATION: {
+                    evaluationService.deleteEvaluation(
+                            (DeleteEvaluationDto) MainUtil.stringJsonToObject(
+                                    mainDto.getJson(),
+                                    DeleteEvaluationDto.class
                             )
                     );
+                    break;
+                }
+                case GET_EVALUATION_DATA:{
+                    evaluationService.getEvaluationData(
+                            (GetEvaluationDataDto) MainUtil.stringJsonToObject(
+                                    mainDto.getJson(),
+                                    GetEvaluationDataDto.class
+                            ),
+                            mainDto.getUser()
+                    );
+                    break;
                 }
             }
         } catch (Exception e) {

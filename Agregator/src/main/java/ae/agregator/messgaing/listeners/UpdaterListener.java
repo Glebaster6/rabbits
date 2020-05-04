@@ -17,7 +17,8 @@ public class UpdaterListener {
     public void listen(byte[] in) {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
 
-        switch (mainDto.getAction()){
+        switch (mainDto.getAction()) {
+            case RETURN_EVALUATION_DATA:
             case RETURN_FACILITY_DATA: {
                 rabbitTemplate.convertAndSend("agregatorToMainProducerQueue", MainUtil.objectToByteArray(mainDto));
                 break;

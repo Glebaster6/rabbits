@@ -160,5 +160,10 @@
                     <#else >
                         <h2 class="text-center">Оценки еще не созданы</h2>
                     </#if>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </@layout.menu>

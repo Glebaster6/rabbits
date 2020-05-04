@@ -34,6 +34,12 @@ public class EvaluationData {
     @JoinColumn(name = "commodity_group_id")
     private CommodityGroup commodityGroup;
 
+    @OneToOne(mappedBy = "evaluationData", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    private AbcResult abcResult;
+
+    @OneToOne(mappedBy = "evaluationData", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    private XyzResult xyzResult;
+
     private Instant created_at;
 
     private Instant updated_at;

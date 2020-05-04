@@ -21,12 +21,18 @@ public class MainDto implements Serializable {
         GET_ALL_USERS,
         REGISTER,
         SAVE_EVALUATION,
+        DELETE_EVALUATION,
         SAVE_EVALUATION_DATA,
         GET_FACILITY_DATA,
-        RETURN_FACILITY_DATA
+        RETURN_FACILITY_DATA,
+        GET_EVALUATION_DATA,
+        RETURN_EVALUATION_DATA,
+        GET_COMMODITY_GROUP_RESULT,
+        RETURN_COMMODITY_GROUP_RESULT
     }
 
     private Action action;
     private String json;
     private byte[] file;
+    private String user;
 }

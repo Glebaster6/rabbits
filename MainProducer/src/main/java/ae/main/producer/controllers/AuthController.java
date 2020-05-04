@@ -2,6 +2,7 @@ package ae.main.producer.controllers;
 
 import ae.main.producer.models.UserData;
 import ae.main.producer.services.authentication.AuthenticationService;
+import main.dto.RegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,7 @@ public class AuthController {
                     return "redirect:/admin/main";
                 }
                 case "EVALUATOR":{
-                    return "redirect:/evaluator/main";
+                    return "redirect:/evaluation/" + user.getFacilityId();
                 }
             }
         }
@@ -60,8 +61,9 @@ public class AuthController {
     }
 
     @PostMapping("sign_up")
-    public String registerNewFacility(){
-
+    public String registerNewFacility(RegistrationDto registrationDto){
+        System.out.println(registrationDto.getFacilityName());
+        service.register(registrationDto);
         return "redirect:/login";
     }
 }

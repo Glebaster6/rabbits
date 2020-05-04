@@ -1,50 +1,56 @@
 var stompClient = null;
-
-function setConnected(connected) {
-    $("#connect").prop("disabled", connected);
-    $("#disconnect").prop("disabled", !connected);
-    if (connected) {
-        $("#conversation").show();
-    }
-    else {
-        $("#conversation").hide();
-    }
-    $("#greetings").html("");
-}
+const data = []
 
 function connect() {
-    var socket = new SockJS('/data-websocket');
+    const socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/sendData', function (value) {
-            showValue(JSON.parse(value.body).content);
+        stompClient.subscribe('/user/queue/notify', function (value) {
+            const resp = JSON.parse(value.body)
+            resp.data = JSON.parse(resp.json)
+            data.push(resp)
+            showValue(resp)
         });
     });
 }
 
-function disconnect() {
-    if (stompClient !== null) {
-        stompClient.disconnect();
-    }
-    setConnected(false);
-    console.log("Disconnected");
-}
-
-function sendName() {
-    stompClient.send("/app/getData", {}, JSON.stringify({'name': $("#name").val()}));
-}
-
 function showValue(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+    switch (message.action) {
+        case 'RETURN_FACILITY_DATA':{
+            fillFacilityData(message.data)
+            break;
+        }
+
+    }
+    $("#greetings").append("");
 }
 
-$(function () {
-    $("form").on('submit', function (e) {
-        e.preventDefault();
-    });
-    $( "#connect" ).click(function() { connect(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send" ).click(function() { sendName(); });
-});
+function fillFacilityData(value) {
+    document.getElementById("facilityName").innerText = value.facilityName;
+    document.getElementById("facilityDescription").innerText = value.facilityDescription;
+
+    const evaluations = value.evaluations
+
+    evaluations.forEach(eval => {
+        $("#tableBody").append("                        <tr>\n" +
+            "                            <td>" + eval.evaluationName +"</td>\n" +
+            "                            <td>"+ eval.createdAt +"</td>\n" +
+            "                            <td>\n" +
+            "                                <p data-placement=\"top\" data-toggle=\"tooltip\" title=\"Edit\">\n" +
+            "                                    <button onclick=\"location.href='"+ value.facilityId + "/info/" + eval.evaluationId + "'\"  class=\"btn btn-primary btn-xs\" data-title=\"Edit\" data-toggle=\"modal\"\n" +
+            "                                            data-target=\"#edit\"><span class=\"glyphicon glyphicon-search\"></span>\n" +
+            "                                    </button>\n" +
+            "                                </p>\n" +
+            "                            </td>\n" +
+            "                            <td>\n" +
+            "                                <p data-placement=\"top\" data-toggle=\"tooltip\" title=\"Delete\">\n" +
+            "                                    <button onclick=\"location.href='" + value.facilityId + "delete/" + eval.evaluationId + "'\" class=\"btn btn-danger btn-xs\" data-title=\"Delete\" data-toggle=\"modal\"\n" +
+            "                                            data-target=\"#delete\"><span class=\"glyphicon glyphicon-trash\"></span>\n" +
+            "                                    </button>\n" +
+            "                                </p>\n" +
+            "                            </td>\n" +
+            "                        </tr>");
+    })
+}
+

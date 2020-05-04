@@ -27,7 +27,7 @@ public class Evaluation {
 
     private Instant lastNeeded;
 
-    @OneToMany(mappedBy = "evaluation", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "evaluation", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<EvaluationData> evaluationData;
 
     private Instant created_at;

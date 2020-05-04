@@ -18,8 +18,9 @@ public class DataStorageListener {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
 
         switch (mainDto.getAction()){
+            case RETURN_EVALUATION_DATA:
             case RETURN_FACILITY_DATA: {
-                rabbitTemplate.convertAndSend("updaterToDataStorageQueue", MainUtil.objectToByteArray(mainDto));
+                rabbitTemplate.convertAndSend("updaterToAgregatorQueue", MainUtil.objectToByteArray(mainDto));
                 break;
             }
         }

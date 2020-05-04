@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReturnFacilityDataDto {
-    private String sessionId;
     private Long facilityId;
     private String facilityName;
     private String facilityDescription;

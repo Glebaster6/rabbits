@@ -29,6 +29,9 @@ public class AgregatorListener {
         try {
             switch (mainDto.getAction()){
                 case REGISTER:
+                case GET_FACILITY_DATA:
+                case GET_EVALUATION_DATA:
+                case DELETE_EVALUATION:
                 case LOGIN:{
                     rabbitTemplate.convertAndSend("updaterToDataStorageQueue", MainUtil.objectToByteArray(mainDto));
                     break;

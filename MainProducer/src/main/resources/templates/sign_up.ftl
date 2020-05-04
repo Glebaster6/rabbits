@@ -13,7 +13,8 @@
                 crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
                 integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-                crossorigin="anonymous"></script>
+                crossorigin="anonymous">
+        </script>
         <link href="/css/login.css" rel="stylesheet">
 
         <title>Вход в систему</title>
@@ -26,11 +27,11 @@
             <h3>Регистрация</h3>
         </div>
         <form action="/sign_up" method="post">
-            <input type="text" id="login" class="fadeIn second" name="login" placeholder="Логин">
+            <input type="text"  id="login" class="fadeIn second" name="login" placeholder="Логин">
             <input type="password" id="password" class="fadeIn third" name="password" placeholder="Пароль">
-            <input type="text" id="facilityName" class="fadeIn second" name="Наименование производства" placeholder="Наименование производства">
-            <input type="text" id="facilityDescription" class="fadeIn second" name="Описание производства" placeholder="Описание производсвта">
-            <input type="submit" class="fadeIn fourth" value="Вход">
+            <input type="text" id="facilityName" class="fadeIn second" name="facilityName" placeholder="Наименование производства">
+            <input type="text" id="facilityDescription" class="fadeIn second" name="facilityDescription" placeholder="Описание производсвта">
+            <input type="submit" class="fadeIn fourth" value="Зарегистрироваться">
         </form>
 
         <div id="formFooter">

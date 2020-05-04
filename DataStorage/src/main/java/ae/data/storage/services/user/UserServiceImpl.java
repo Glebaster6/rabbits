@@ -71,13 +71,15 @@ public class UserServiceImpl implements UserService {
 
         user = userRepository.save(user);
 
-        userDataRepository.save(UserData.builder()
-                .id(user.getLogin())
-                .password(user.getPassword())
-                .role(user.getRole())
-                .facilityId(user.getFacility().getId())
-                .userId(user.getId())
-                .isCorrect(true)
-                .build());
+        userDataRepository.save(
+                UserData.builder()
+                        .id(user.getLogin())
+                        .password(user.getPassword())
+                        .role(user.getRole())
+                        .facilityId(user.getFacility().getId())
+                        .userId(user.getId())
+                        .isCorrect(true)
+                        .build()
+        );
     }
 }

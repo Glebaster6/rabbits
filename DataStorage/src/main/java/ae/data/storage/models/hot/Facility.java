@@ -35,7 +35,7 @@ public class Facility {
     @OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
     private List<CommodityGroupCharacteristic> commodityGroupCharacteristics;
 
-    @OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "facility", fetch = FetchType.EAGER)
     private List<Evaluation> evaluations;
 
     private Instant created_at;

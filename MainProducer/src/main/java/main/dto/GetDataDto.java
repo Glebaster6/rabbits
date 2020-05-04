@@ -12,4 +12,5 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetDataDto implements Serializable {
+    private String sessionId;
 }
