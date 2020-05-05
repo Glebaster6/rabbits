@@ -19,6 +19,7 @@ public class UpdaterListener {
 
         switch (mainDto.getAction()) {
             case RETURN_EVALUATION_DATA:
+            case RETURN_EVALUATION_DATA_BY_EVALUATION_AND_PERIOD:
             case RETURN_FACILITY_DATA: {
                 rabbitTemplate.convertAndSend("agregatorToMainProducerQueue", MainUtil.objectToByteArray(mainDto));
                 break;

@@ -75,6 +75,16 @@ public class UpdaterListener {
                     );
                     break;
                 }
+                case GET_EVALUATION_DATA_BY_EVALUATION_AND_PERIOD:{
+                    evaluationService.getEvaluationDataByEvaluationAndPeriod(
+                            (GetEvaluationDataByEvaluationAndPeriodDto) MainUtil.stringJsonToObject(
+                                    mainDto.getJson(),
+                                    GetEvaluationDataByEvaluationAndPeriodDto.class
+                            ),
+                            mainDto.getUser()
+                    );
+                    break;
+                }
             }
         } catch (Exception e) {
             System.out.println(e.toString());

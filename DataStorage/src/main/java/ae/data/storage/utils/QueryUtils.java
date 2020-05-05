@@ -250,23 +250,39 @@ public class QueryUtils {
             "         JOIN xyz_result xyz ON r.cg_id = xyz.evaluation_data_id\n" +
             "         JOIN abc_result abc ON r.cg_id = abc.evaluation_data_id;";
 
-    public static String getAbcResultsByEvaluationIdAndPeriodQuery(){
+    private final static String getEvaluationDataByPeriodAndEvaluationQuery = "select ed.id,\n" +
+            "       cg.id as commodity_group_id,\n" +
+            "       cg.name,\n" +
+            "       round(ed.revenue::numeric, 2) as revenue,\n" +
+            "       round((ed.revenue - consumption)::numeric, 2) as profit,\n" +
+            "       round(ed.consumption::numeric, 2) as consumption,\n" +
+            "       ed.volume_of_sales\n" +
+            "from evaluation_data ed\n" +
+            "join commodity_group cg on ed.commodity_group_id = cg.id\n" +
+            "WHERE evaluation_id = :evaluation_id\n" +
+            "  AND period = :period";
+
+    public static String getAbcResultsByEvaluationIdAndPeriodQuery() {
         return getAbcResultsByEvaluationIdAndPeriodQuery;
     }
 
-    public static String getProfitXyzResultQuery(){
+    public static String getProfitXyzResultQuery() {
         return getProfitXyzResultQuery;
     }
 
-    public static String getRevenueXyzResultQuery(){
+    public static String getRevenueXyzResultQuery() {
         return getRevenueXyzResultQuery;
     }
 
-    public static String getVolumeOfSalesXyzResultQuery(){
+    public static String getVolumeOfSalesXyzResultQuery() {
         return getVolumeOfSalesXyzResultQuery;
     }
 
-    public static String getCommodityGroupAnalysisResultQuery(){
+    public static String getCommodityGroupAnalysisResultQuery() {
         return getCommodityGroupAnalysisResultQuery;
+    }
+
+    public static String getEvaluationDataByPeriodAndEvaluationQuery() {
+        return getEvaluationDataByPeriodAndEvaluationQuery;
     }
 }

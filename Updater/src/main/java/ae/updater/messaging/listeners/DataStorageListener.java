@@ -19,6 +19,7 @@ public class DataStorageListener {
 
         switch (mainDto.getAction()){
             case RETURN_EVALUATION_DATA:
+            case RETURN_EVALUATION_DATA_BY_EVALUATION_AND_PERIOD:
             case RETURN_FACILITY_DATA: {
                 rabbitTemplate.convertAndSend("updaterToAgregatorQueue", MainUtil.objectToByteArray(mainDto));
                 break;

@@ -22,11 +22,12 @@ public class MainProducerListener {
             case GET_FACILITY_DATA:
             case DELETE_EVALUATION:
             case GET_EVALUATION_DATA:
+            case GET_EVALUATION_DATA_BY_EVALUATION_AND_PERIOD:
             case PARSE_EXCEL:{
                 rabbitTemplate.convertAndSend("agregatorToUpdaterQueue", MainUtil.objectToByteArray(mainDto));
                 break;
             }
-            case RETURN_COMMODITY_GROUP_RESULT:{
+            case GET_COMMODITY_GROUP_RESULT:{
                 rabbitTemplate.convertAndSend("agregatorToMarketAnalysisQueue", MainUtil.objectToByteArray(mainDto));
                 break;
             }

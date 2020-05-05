@@ -5,15 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EvaluationDataRowDto {
+public class ReturnEvaluationDataRowDto implements Serializable {
     private Long id;
-    private Long evaluationId;
-    private String name;
-    private Integer period;
+    private Long commodityGroupId;
+    private String commodityGroupName;
     private Double revenue;
     private Double profit;
     private Double consumption;

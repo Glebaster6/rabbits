@@ -14,4 +14,5 @@ import java.io.Serializable;
 public class ReturnEvaluationDataRow implements Serializable {
     private String period;
     private Long cgCount;
+    private Integer periodNum;
 }

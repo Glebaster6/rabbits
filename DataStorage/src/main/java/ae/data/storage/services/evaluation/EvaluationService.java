@@ -17,4 +17,6 @@ public interface EvaluationService {
     void getEvaluationData(GetEvaluationDataDto getEvaluationDataDto, String username);
 
     public void getCommodityGroupResult(GetCommodityGroupResultDto getCommodityGroupResultDto, String user);
+
+    public void getEvaluationDataByEvaluationAndPeriod(GetEvaluationDataByEvaluationAndPeriodDto dto, String username);
 }

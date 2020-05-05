@@ -6,12 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetEvaluationDataDto implements Serializable {
-    private Long evaluationId;
-    private Long facilityId;
+public class ReturnEvaluationDataByEvaluationAndPeriodDto implements Serializable {
+    private List<EvaluationDataRowDto> evaluationDataRows;
 }

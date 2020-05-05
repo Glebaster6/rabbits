@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ReturnEvaluationData implements Serializable {
     private Long evaluationId;
+    private Long facilityId;
     private String evaluationName;
     private String evaluationDescription;
     private List<ReturnEvaluationDataRow> evaluations;

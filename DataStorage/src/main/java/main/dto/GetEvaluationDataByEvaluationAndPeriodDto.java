@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetEvaluationDataDto implements Serializable {
+public class GetEvaluationDataByEvaluationAndPeriodDto implements Serializable {
     private Long evaluationId;
-    private Long facilityId;
+    private Integer period;
 }

@@ -8,6 +8,7 @@ import ae.data.storage.repositories.hot.*;
 import ae.data.storage.repositories.redis.DataMapperRepository;
 import ae.data.storage.rowmappers.AbcResultRowMapper;
 import ae.data.storage.rowmappers.CommodityGroupAnalysisResultRowMapper;
+import ae.data.storage.rowmappers.ReturnEvaluationDataRowMapper;
 import ae.data.storage.rowmappers.XyzRowMapper;
 import ae.data.storage.utils.QueryUtils;
 import lombok.SneakyThrows;
@@ -108,7 +109,7 @@ public class EvaluationServiceImpl implements EvaluationService {
     public void getFacilityData(GetFacilityDataDto getFacilityDataDto, String username) {
         Facility facility = facilityRepository.findById(getFacilityDataDto.getFacilityId()).get();
 
-        List<Evaluation> evaluations =evaluationRepository.findByFacility(facility);
+        List<Evaluation> evaluations = evaluationRepository.findByFacility(facility);
 
         List<EvaluationRowDataDto> dataRows = null;
         if (evaluations != null) {
@@ -162,6 +163,7 @@ public class EvaluationServiceImpl implements EvaluationService {
                                     .toLocalDate().plusMonths(value)
                                     .format(DateTimeFormatter.ISO_DATE))
                             .cgCount(evaluationDatas.stream().filter(val -> val.getPeriod() == value).count())
+                            .periodNum(value)
                             .build()
             );
         });
@@ -169,6 +171,7 @@ public class EvaluationServiceImpl implements EvaluationService {
 
         ReturnEvaluationData returnEvaluationData = ReturnEvaluationData.builder()
                 .evaluationId(evaluation.getId())
+                .facilityId(getEvaluationDataDto.getFacilityId())
                 .evaluationName(evaluation.getName())
                 .evaluationDescription(evaluation.getDescription())
                 .evaluations(list)
@@ -197,6 +200,44 @@ public class EvaluationServiceImpl implements EvaluationService {
         MainDto mainDto = MainDto.builder()
                 .action(MainDto.Action.RETURN_COMMODITY_GROUP_RESULT)
                 .json(MainUtil.objectToJsonString(commodityGroupResultDto))
+                .user(user)
+                .build();
+
+        rabbitTemplate.convertAndSend("dataStorageToMarketAnalysisQueue", MainUtil.objectToByteArray(mainDto));
+    }
+
+    @Override
+    public void getEvaluationDataByEvaluationAndPeriod(GetEvaluationDataByEvaluationAndPeriodDto dto, String user) {
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue("evaluation_id", dto.getEvaluationId())
+                .addValue("period", dto.getPeriod());
+
+        List<EvaluationDataRowDto> evaluationDataRows = namedParameterJdbcTemplate.query(
+                QueryUtils.getEvaluationDataByPeriodAndEvaluationQuery(),
+                sqlParameterSource,
+                new ReturnEvaluationDataRowMapper()
+        );
+
+        Collections.sort(evaluationDataRows, new Comparator<EvaluationDataRowDto>() {
+            @Override
+            public int compare(EvaluationDataRowDto o1, EvaluationDataRowDto o2) {
+                return extractInt(o1.getName()) - extractInt(o2.getName());
+            }
+
+            int extractInt(String s) {
+                String num = s.replaceAll("\\D", "");
+                return num.isEmpty() ? 0 : Integer.parseInt(num);
+            }
+        });
+
+        ReturnEvaluationDataByEvaluationAndPeriodDto returnDto = ReturnEvaluationDataByEvaluationAndPeriodDto.builder()
+                .evaluationDataRows(evaluationDataRows)
+                .build();
+
+
+        MainDto mainDto = MainDto.builder()
+                .action(MainDto.Action.RETURN_EVALUATION_DATA_BY_EVALUATION_AND_PERIOD)
+                .json(MainUtil.objectToJsonString(returnDto))
                 .user(user)
                 .build();
 

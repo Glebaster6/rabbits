@@ -79,4 +79,26 @@ public class EvaluationServiceImpl implements EvaluationService {
                 .build();
         rabbitTemplate.convertAndSend("mainProducerToAgregatorQueue", MainUtil.objectToByteArray(mainDto));
     }
+
+    @Override
+    public void getEvaluationDataByEvaluationAndPeriod(GetEvaluationDataByEvaluationAndPeriodDto dto,
+                                                       Authentication authentication){
+        MainDto mainDto = MainDto.builder()
+                .action(MainDto.Action.GET_EVALUATION_DATA_BY_EVALUATION_AND_PERIOD)
+                .json(MainUtil.objectToJsonString(dto))
+                .user(authenticationService.getUserByAuthentication(authentication).getId())
+                .build();
+
+        rabbitTemplate.convertAndSend("mainProducerToAgregatorQueue", MainUtil.objectToByteArray(mainDto));
+    }
+
+    public void getEvaluationResultById(GetCommodityGroupResultDto getDto, Authentication authentication){
+        MainDto mainDto = MainDto.builder()
+                .action(MainDto.Action.GET_COMMODITY_GROUP_RESULT)
+                .json(MainUtil.objectToJsonString(getDto))
+                .user(authenticationService.getUserByAuthentication(authentication).getId())
+                .build();
+
+        rabbitTemplate.convertAndSend("mainProducerToAgregatorQueue", MainUtil.objectToByteArray(mainDto));
+    }
 }

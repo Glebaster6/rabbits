@@ -3,10 +3,7 @@ package ae.main.producer.controllers;
 import ae.main.producer.services.authentication.AuthenticationService;
 import ae.main.producer.services.evaluation.EvaluationService;
 import lombok.SneakyThrows;
-import main.dto.DeleteEvaluationDto;
-import main.dto.EvaluationCreateDto;
-import main.dto.GetEvaluationDataDto;
-import main.dto.GetFacilityDataDto;
+import main.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -65,12 +62,53 @@ public class EvaluationController {
     public String getEvaluationData(@PathVariable("facility_id") Long facilityId,
                                     @PathVariable("evaluation_id") Long evaluationId,
                                     Authentication authentication) {
+
+
         if (authenticationService.getUserByAuthentication(authentication).getFacilityId() == facilityId) {
-            evaluationService.getEvaluationDto(GetEvaluationDataDto.builder().evaluationId(evaluationId).build(), authentication);
+            evaluationService.getEvaluationDto(
+                    GetEvaluationDataDto.builder()
+                            .evaluationId(evaluationId)
+                            .facilityId(facilityId)
+                            .build()
+                    , authentication);
         } else {
             return "redirect:/";
         }
 
         return "evaluation_info";
+    }
+
+    @GetMapping("/{facility_id}/info/{evaluation_id}/period/{period}")
+    public String getDataInPeriod(@PathVariable("facility_id") Long facilityId,
+                                  @PathVariable("evaluation_id") Long evaluationId,
+                                  @PathVariable("period") Integer period,
+                                  Authentication authentication
+    ) {
+
+        if (authenticationService.getUserByAuthentication(authentication).getFacilityId() == facilityId) {
+            evaluationService.getEvaluationDataByEvaluationAndPeriod(
+                    GetEvaluationDataByEvaluationAndPeriodDto.builder()
+                            .evaluationId(evaluationId)
+                            .period(period)
+                            .build(), authentication
+            );
+        } else {
+            return "redirect:/";
+        }
+
+        return "period_info";
+    }
+
+    @GetMapping("/{facility_id}/info/{evaluation_id}/period/{period}/evaluation_data/{evaluation_data_id}")
+    public String getEvaluationDataResultDto(@PathVariable("facility_id") Long facilityId,
+                                             @PathVariable("evaluation_id") Long evaluationId,
+                                             @PathVariable("period") Integer period,
+                                             @PathVariable("evaluation_data_id") Long evaluationDataId,
+                                             Authentication authentication){
+        evaluationService.getEvaluationResultById(GetCommodityGroupResultDto.builder()
+                .id(evaluationDataId)
+                .build(), authentication
+        );
+        return "commodity_group_result";
     }
 }

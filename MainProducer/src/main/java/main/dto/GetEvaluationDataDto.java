@@ -13,4 +13,5 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class GetEvaluationDataDto implements Serializable {
     private Long evaluationId;
+    private Long facilityId;
 }

@@ -31,6 +31,7 @@ public class AgregatorListener {
                 case REGISTER:
                 case GET_FACILITY_DATA:
                 case GET_EVALUATION_DATA:
+                case GET_EVALUATION_DATA_BY_EVALUATION_AND_PERIOD:
                 case DELETE_EVALUATION:
                 case LOGIN:{
                     rabbitTemplate.convertAndSend("updaterToDataStorageQueue", MainUtil.objectToByteArray(mainDto));
