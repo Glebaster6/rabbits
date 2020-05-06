@@ -18,7 +18,6 @@ public class AgregatorListener {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
         switch (mainDto.getAction()){
             case GET_COMMODITY_GROUP_RESULT:{
-                System.out.println("kek");
                 rabbitTemplate.convertAndSend("marketAnalysisToDataStorageQueue", MainUtil.objectToByteArray(mainDto));
                 break;
             }

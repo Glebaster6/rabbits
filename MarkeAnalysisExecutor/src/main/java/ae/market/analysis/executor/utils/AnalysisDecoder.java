@@ -9,13 +9,15 @@ public final class AnalysisDecoder {
     private static Map<String, String> xyzValues;
     private static Map<String, Map<String, String>> abcXyzValues;
 
-    private AnalysisDecoder() {
+    static {
         abcValues = new HashMap<>();
         xyzValues = new HashMap<>();
         abcXyzValues = new HashMap<>();
+        abcValues.put(null, "-");
         abcValues.put("a", "Максимально ценные товары, занимают 20% ассортимента продукции, и приносят 80% прибыли от продаж");
         abcValues.put("b", "Малоценные товары, занимают 30% ассортимента продукции, и обеспечивают 15% продаж");
         abcValues.put("c", "Не востребованные товары, занимают 50% ассортимента, и обеспечивают 5% прибылей от продаж");
+        xyzValues.put(null, "-");
         xyzValues.put("x", "Товары с наиболее устойчивыми объемами продаж");
         xyzValues.put("y", "Товары с прогнозируемыми, но изменчивыми объемами продаж");
         xyzValues.put("z", "Товары, обладающие случайным спросом");
