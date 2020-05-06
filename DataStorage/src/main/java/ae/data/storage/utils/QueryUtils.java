@@ -242,7 +242,16 @@ public class QueryUtils {
             "                           JOIN evaluation e ON cg.evaluation_id = e.id\n" +
             "                           JOIN abc_result ar on cg.id = ar.evaluation_data_id\n" +
             "                           JOIN commodity_group c on cg.commodity_group_id = c.id\n" +
-            "                  WHERE c.id = :id\n" +
+            "                  WHERE c.id = (\n" +
+            "                      select min(ed.id)\n" +
+            "                      from evaluation_data ed\n" +
+            "                               JOIN (\n" +
+            "                          select *\n" +
+            "                          from evaluation_data ed1\n" +
+            "                          WHERE ed1.id = :id\n" +
+            "                      ) byid ON ed.evaluation_id = byid.evaluation_id\n" +
+            "                          AND ed.commodity_group_id = byid.evaluation_id\n" +
+            "                  )\n" +
             "                  ORDER BY cg.id\n" +
             "              ) cgd\n" +
             "         GROUP BY cgd.name\n" +
