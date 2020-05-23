@@ -28,6 +28,9 @@ public class CommodityGroupCharacteristic {
     @OneToMany(mappedBy = "commodityGroupCharacteristic", fetch = FetchType.LAZY)
     private List<CommodityGroupCharacteristicValue> commodityGroupCharacteristicValues;
 
+    @OneToMany(mappedBy = "commodityGroupCharacteristic", fetch = FetchType.LAZY)
+    private List<CommodityGroupParameter> commodityGroupParameters;
+
     private Instant created_at;
 
     private Instant updated_at;

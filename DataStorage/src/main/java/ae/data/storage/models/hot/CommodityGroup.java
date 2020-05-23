@@ -28,6 +28,8 @@ public class CommodityGroup {
     @OneToMany(mappedBy = "commodityGroup")
     private List<EvaluationData> evaluationData;
 
+    @OneToMany(mappedBy = "commodityGroup", fetch = FetchType.LAZY)
+    private List<CommodityGroupParameter> commodityGroupParameters;
 
     private Instant created_at;
 
