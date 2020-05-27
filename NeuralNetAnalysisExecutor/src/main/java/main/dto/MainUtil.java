@@ -3,16 +3,9 @@ package main.dto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 public class MainUtil {
-    /**
-     * @param object
-     * @return byte[]
-     */
     @SneakyThrows
     public static byte[] objectToByteArray(Object object){
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -22,10 +15,6 @@ public class MainUtil {
         return bos.toByteArray();
     }
 
-    /**
-     * @param  data
-     * @return Object
-     */
     @SneakyThrows
     public static Object byteArrayToObject(byte[] data){
         ByteArrayInputStream bis = new ByteArrayInputStream(data);
@@ -33,26 +22,25 @@ public class MainUtil {
         return ois.readObject();
     }
 
-    /**
-     * @param object
-     * @return String
-     */
     @SneakyThrows
     public static String objectToJsonString(Object object){
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(object);
     }
 
-    /**
-     * @param value
-     * @param valueType
-     * @param <T>
-     * @return T
-     */
     @SneakyThrows
     public static <T> Object stringJsonToObject(String value, Class<T> valueType ){
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(value, valueType);
     }
-}
 
+    @SneakyThrows
+    public static String byteArrayToFile(String path, byte[] data){
+        File file = new File(path);
+        OutputStream os = new FileOutputStream(file);
+        os.write(data);
+        os.close();
+
+        return path;
+    }
+}

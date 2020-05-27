@@ -14,11 +14,7 @@ import java.io.Serializable;
 public class MainDto implements Serializable {
     public enum Action {
         LOGIN,
-        PARSE_EXCEL,
         LOGOUT,
-        ANALYZE_MARKET,
-        ANALYZE_NEURAL,
-        GET_ALL_USERS,
         REGISTER,
         SAVE_EVALUATION,
         DELETE_EVALUATION,
@@ -30,7 +26,15 @@ public class MainDto implements Serializable {
         GET_COMMODITY_GROUP_RESULT,
         RETURN_COMMODITY_GROUP_RESULT,
         GET_EVALUATION_DATA_BY_EVALUATION_AND_PERIOD,
-        RETURN_EVALUATION_DATA_BY_EVALUATION_AND_PERIOD
+        RETURN_EVALUATION_DATA_BY_EVALUATION_AND_PERIOD,
+        TRAIN_MODEL,
+        SAVE_TRAINED_MODEL,
+        SAVE_DATASET,
+        GET_MODEL,
+        MAKE_PREDICTION,
+        GET_PREDICTION,
+        RETURN_PREDICTION,
+        PARSE_EXCEL
     }
 
     private Action action;
@@ -38,3 +42,5 @@ public class MainDto implements Serializable {
     private byte[] file;
     private String user;
 }
+
+

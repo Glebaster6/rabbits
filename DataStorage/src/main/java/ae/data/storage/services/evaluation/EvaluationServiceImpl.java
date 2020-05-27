@@ -150,7 +150,10 @@ public class EvaluationServiceImpl implements EvaluationService {
         Evaluation evaluation = evaluationRepository.findById(getEvaluationDataDto.getEvaluationId()).get();
         List<EvaluationData> evaluationDatas = evaluation.getEvaluationData();
 
-        Set<Integer> periodSet = evaluationDatas.stream().map(EvaluationData::getPeriod).collect(Collectors.toCollection(TreeSet::new));
+        Set<Integer> periodSet = evaluationDatas
+                .stream()
+                .map(EvaluationData::getPeriod)
+                .collect(Collectors.toCollection(TreeSet::new));
 
         List<ReturnEvaluationDataRow> list = new ArrayList<>();
 
@@ -188,6 +191,7 @@ public class EvaluationServiceImpl implements EvaluationService {
 
     @Override
     public void getCommodityGroupResult(GetCommodityGroupResultDto getCommodityGroupResultDto, String user) {
+
         SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue("id", getCommodityGroupResultDto.getId());
 
@@ -203,7 +207,10 @@ public class EvaluationServiceImpl implements EvaluationService {
                 .user(user)
                 .build();
 
-        rabbitTemplate.convertAndSend("dataStorageToMarketAnalysisQueue", MainUtil.objectToByteArray(mainDto));
+        rabbitTemplate.convertAndSend(
+                "dataStorageToMarketAnalysisQueue",
+                MainUtil.objectToByteArray(mainDto)
+        );
     }
 
     @Override

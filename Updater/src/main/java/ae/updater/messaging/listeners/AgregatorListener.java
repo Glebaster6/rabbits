@@ -1,5 +1,6 @@
 package ae.updater.messaging.listeners;
 
+import ae.updater.services.ModelTrainer;
 import ae.updater.utils.ExcelDataReader;
 import lombok.SneakyThrows;
 import main.dto.MainDto;
@@ -20,6 +21,9 @@ public class AgregatorListener {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private ModelTrainer modelTrainer;
 
     @SneakyThrows
     @RabbitListener(queues = "agregatorToUpdaterQueue")
@@ -43,6 +47,10 @@ public class AgregatorListener {
                         MainUtil.byteArrayToFile(path, mainDto.getFile());
                         excelDataReader.readData(new File(path), mainDto.getJson());
                     }
+                    break;
+                }
+                case TRAIN_MODEL:{
+                    modelTrainer.trainModel(mainDto);
                     break;
                 }
             }
