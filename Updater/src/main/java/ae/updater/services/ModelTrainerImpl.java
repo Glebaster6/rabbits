@@ -129,6 +129,13 @@ public class ModelTrainerImpl implements ModelTrainer {
                 .file(Files.readAllBytes(new File(modelPath).toPath()))
                 .build();
 
+        MainDto dataset = MainDto.builder()
+                .action(MainDto.Action.SAVE_DATASET)
+                .user(mainDto.getUser())
+                .file(mainDto.getFile())
+                .build();
+
         rabbitTemplate.convertAndSend("updaterToFileStorage", MainUtil.objectToByteArray(result));
+        rabbitTemplate.convertAndSend("updaterToFileStorage", MainUtil.objectToByteArray(dataset));
     }
 }
