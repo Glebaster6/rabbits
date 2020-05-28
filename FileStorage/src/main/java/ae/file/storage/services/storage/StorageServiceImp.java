@@ -34,7 +34,7 @@ public class StorageServiceImp implements StorageService {
         String path = "src/main/resources/storage/models/" + user + ".json";
         MainDto result = MainDto.builder()
                 .user(user)
-                .action(MainDto.Action.SAVE_TRAINED_MODEL)
+                .action(MainDto.Action.RETURN_PREDICTION)
                 .file(Files.readAllBytes(new File(path).toPath()))
                 .build();
 
