@@ -20,6 +20,7 @@ public class UpdaterListener {
     public void listen(byte[] in) {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
 
+        System.out.println(mainDto.getAction());
         try {
             switch (mainDto.getAction()) {
                 case SAVE_EVALUATION: {
@@ -55,6 +56,7 @@ public class UpdaterListener {
                             ),
                             mainDto.getUser()
                     );
+                    break;
                 }
                 case DELETE_EVALUATION: {
                     evaluationService.deleteEvaluation(
