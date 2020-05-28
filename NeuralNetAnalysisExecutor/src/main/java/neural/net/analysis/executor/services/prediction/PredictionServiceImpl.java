@@ -3,19 +3,13 @@ package neural.net.analysis.executor.services.prediction;
 import lombok.SneakyThrows;
 import main.dto.MainDto;
 import main.dto.MainUtil;
-import main.dto.ToPredictDto;
 import org.datavec.api.records.reader.RecordReader;
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader;
 import org.datavec.api.split.FileSplit;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
-import org.deeplearning4j.datasets.iterator.INDArrayDataSetIterator;
-import org.deeplearning4j.nn.api.Classifier;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.util.ModelSerializer;
-import org.nd4j.evaluation.classification.Evaluation;
-import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
-import org.nd4j.linalg.factory.Nd4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,7 +41,6 @@ public class PredictionServiceImpl implements PredictionService {
         int batchSize = 150;
 
         DataSetIterator iterator = new RecordReaderDataSetIterator(recordReader, batchSize, labelIndex, numClasses);
-        Evaluation evaluation = newModel.evaluate(iterator);
 
         List<String> prediction = newModel.predict(iterator.next());
 
@@ -61,6 +54,17 @@ public class PredictionServiceImpl implements PredictionService {
                                 .json(MainUtil.objectToJsonString(prediction))
                                 .build()
                 )
+        );
+    }
+
+    @Override
+    public void getModel(MainDto mainDto) {
+        rabbitTemplate.convertAndSend(
+                "neuralNetAnalysisExecutorToFileStorage",
+                MainDto.builder()
+                        .action(MainDto.Action.GET_MODEL)
+                        .user(mainDto.getUser())
+                        .build()
         );
     }
 }

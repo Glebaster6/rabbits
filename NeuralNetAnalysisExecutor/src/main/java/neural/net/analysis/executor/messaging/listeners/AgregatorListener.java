@@ -21,7 +21,7 @@ public class AgregatorListener {
         try {
             switch (mainDto.getAction()){
                 case GET_PREDICTION:{
-                    predictionService.makePrediction(mainDto);
+                    predictionService.getModel(mainDto);
                     break;
                 }
             }

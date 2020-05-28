@@ -2,12 +2,10 @@ package neural.net.analysis.executor.messaging;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Queues {
-    @Bean
-    public Queue neuralNetAnalysisExecutorToUpdater(){
-        return new Queue("neuralNetAnalysisExecutorToUpdater", false);
-    }
 
     @Bean
     public Queue neuralNetAnalysisExecutorToAgregator(){
@@ -22,11 +20,6 @@ public class Queues {
     @Bean
     public Queue agregatorToNeuralNetAnalysisExecutor(){
         return new Queue("agregatorToNeuralNetAnalysisExecutor", false);
-    }
-
-    @Bean
-    public Queue updaterToNeuralNetAnalysisExecutor(){
-        return new Queue("updaterToNeuralNetAnalysisExecutor", false);
     }
 
     @Bean
