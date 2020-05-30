@@ -9,21 +9,21 @@ public class Queues {
 
     @Bean
     public Queue neuralNetAnalysisExecutorToAgregator(){
-        return new Queue("neuralNetAnalysisExecutorToAgregator", false);
+        return new Queue("neuralNetAnalysisToAgregatorQueue", false);
     }
 
     @Bean
     public Queue neuralNetAnalysisExecutorToFileStorage(){
-        return new Queue("neuralNetAnalysisExecutorToFileStorage", false);
+        return new Queue("neuralNetAnalysisToFileStorageQueue", false);
     }
 
     @Bean
     public Queue agregatorToNeuralNetAnalysisExecutor(){
-        return new Queue("agregatorToNeuralNetAnalysisExecutor", false);
+        return new Queue("agregatorToNeuralNetAnalysisQueue", false);
     }
 
     @Bean
     public Queue fileStorageToNeuralNetAnalysisExecutor(){
-        return new Queue("fileStorageToNeuralNetAnalysisExecutor", false);
+        return new Queue("fileStorageToNeuralNetAnalysisQueue", false);
     }
 }

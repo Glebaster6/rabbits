@@ -14,7 +14,7 @@ public class FileStorageListener {
     private PredictionService predictionService;
 
     @SneakyThrows
-    @RabbitListener(queues = "agregatorToUpdaterQueue")
+    @RabbitListener(queues = "fileStorageToNeuralNetAnalysisQueue")
     public void listen(byte[] in) {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
 

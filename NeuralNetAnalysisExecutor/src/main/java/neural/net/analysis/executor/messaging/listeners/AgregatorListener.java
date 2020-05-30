@@ -14,7 +14,7 @@ public class AgregatorListener {
     private PredictionService predictionService;
 
     @SneakyThrows
-    @RabbitListener(queues = "agregatorToUpdaterQueue")
+    @RabbitListener(queues = "agregatorToNeuralNetAnalysisQueue")
     public void listen(byte[] in) {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
 
