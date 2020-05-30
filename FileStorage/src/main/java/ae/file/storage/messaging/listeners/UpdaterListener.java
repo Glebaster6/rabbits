@@ -12,7 +12,7 @@ public class UpdaterListener {
     @Autowired
     private StorageService storageService;
 
-    @RabbitListener(queues = "dataStorageToUpdaterQueue")
+    @RabbitListener(queues = "updaterToFileStorageQueue")
     public void listen(byte[] in) {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
 

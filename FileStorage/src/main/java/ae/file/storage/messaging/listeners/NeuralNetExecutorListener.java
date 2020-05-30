@@ -13,7 +13,7 @@ public class NeuralNetExecutorListener {
     @Autowired
     private StorageService storageService;
 
-    @RabbitListener(queues = "dataStorageToUpdaterQueue")
+    @RabbitListener(queues = "neuralNetAnalysisToFileStorageQueue")
     public void listen(byte[] in) {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
 
