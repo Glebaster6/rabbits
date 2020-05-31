@@ -31,7 +31,7 @@ public class StorageServiceImp implements StorageService {
     @SneakyThrows
     @Override
     public void getModelFile(String user) {
-        String path = "src/main/resources/storage/models/" + user + ".json";
+        String path = "src/main/resources/storage/models/" + user + ".ser";
         MainDto result = MainDto.builder()
                 .user(user)
                 .action(MainDto.Action.RETURN_PREDICTION)
