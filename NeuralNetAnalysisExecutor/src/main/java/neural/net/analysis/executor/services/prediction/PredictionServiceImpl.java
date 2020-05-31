@@ -9,6 +9,8 @@ import org.datavec.api.split.FileSplit;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.util.ModelSerializer;
+import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.dataset.SplitTestAndTrain;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,22 +30,37 @@ public class PredictionServiceImpl implements PredictionService {
     @SneakyThrows
     @Override
     public void makePrediction(MainDto mainDto) {
+        List<String> names = new ArrayList<>();
+        names.add("Увеличение до 25%");
+        names.add("Увеличение до 50%");
+        names.add("Увеличение до 75%");
+        names.add("Уменьшение до 25%");
+        names.add("Уменьшение до 50%");
+        names.add("Уменьшение до 75%");
+
         String path = "src/main/resources/temp/" + Instant.now().toString() + ".csv";
         MainUtil.byteArrayToFile(path, mainDto.getFile());
         File file = new File(path);
         MultiLayerNetwork newModel = ModelSerializer.restoreMultiLayerNetwork(file);
 
-        String csvPath = "src/main/resources/temp/" + Instant.now().toString() + ".csv";
         RecordReader recordReader = new CSVRecordReader(0, ";");
-        recordReader.initialize(new FileSplit(new File("src/main/resources/temp/" + Instant.now().toString() + ".csv")));
+        String dataPath = "src/main/resources/temp/" + Instant.now().toString() + ".csv";
+        recordReader.initialize(new FileSplit(new File(dataPath)));
+
 
         int labelIndex = recordReader.getLabels().size();
         int numClasses = 6;
-        int batchSize = 150;
+        int batchSize = 1;
 
-        DataSetIterator iterator = new RecordReaderDataSetIterator(recordReader, batchSize, labelIndex, numClasses);
 
-        List<String> prediction = newModel.predict(iterator.next());
+        DataSetIterator iterator = new RecordReaderDataSetIterator(recordReader,batchSize,labelIndex,numClasses);
+        DataSet allData = iterator.next();
+        allData.shuffle();
+        SplitTestAndTrain testAndTrain = allData.splitTestAndTrain(1);
+
+        DataSet testData = testAndTrain.getTest();
+
+        String prediction = newModel.predict(testData).get(0);
 
 
         rabbitTemplate.convertAndSend(
