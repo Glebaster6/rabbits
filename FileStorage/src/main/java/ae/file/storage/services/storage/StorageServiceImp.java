@@ -20,7 +20,7 @@ public class StorageServiceImp implements StorageService {
     public void saveFile(MainDto mainDto) {
         String path;
         if (mainDto.getAction().equals(MainDto.Action.SAVE_TRAINED_MODEL)) {
-            path = "src/main/resources/storage/models/" + mainDto.getUser() + ".json";
+            path = "src/main/resources/storage/models/" + mainDto.getUser() + ".ser";
             MainUtil.byteArrayToFile(path, mainDto.getFile());
         } else if (mainDto.getAction().equals(MainDto.Action.SAVE_DATASET)) {
             path = "src/main/resources/storage/datasets/" + mainDto.getUser() + ".csv";
