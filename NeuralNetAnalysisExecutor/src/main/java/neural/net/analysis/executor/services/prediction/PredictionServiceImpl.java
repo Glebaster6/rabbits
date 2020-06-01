@@ -62,9 +62,8 @@ public class PredictionServiceImpl implements PredictionService {
 
         String prediction = newModel.predict(testData).get(0);
 
-
         rabbitTemplate.convertAndSend(
-                "neuralNetAnalysisExecutorToAgregator",
+                "neuralNetAnalysisToAgregatorQueue",
                 MainUtil.objectToByteArray(
                         MainDto.builder()
                                 .user(mainDto.getUser())
@@ -78,7 +77,7 @@ public class PredictionServiceImpl implements PredictionService {
     @Override
     public void getModel(MainDto mainDto) {
         rabbitTemplate.convertAndSend(
-                "neuralNetAnalysisExecutorToFileStorage",
+                "neuralNetAnalysisToFileStorage",
                 MainDto.builder()
                         .action(MainDto.Action.GET_MODEL)
                         .user(mainDto.getUser())

@@ -17,11 +17,10 @@ public class AgregatorListener {
     @RabbitListener(queues = "agregatorToNeuralNetAnalysisQueue")
     public void listen(byte[] in) {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
-
         try {
             switch (mainDto.getAction()){
                 case GET_PREDICTION:{
-                    predictionService.getModel(mainDto);
+                    predictionService.makePrediction(mainDto);
                     break;
                 }
             }
