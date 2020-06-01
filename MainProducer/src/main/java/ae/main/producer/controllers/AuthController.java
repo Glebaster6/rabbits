@@ -35,8 +35,9 @@ public class AuthController {
         if (authentication != null) {
             request.getSession().invalidate();
         }
-        return "redirect:/login";
+        return "redirect:/";
     }
+
 
     @GetMapping("/")
     public String root(Authentication authentication) {

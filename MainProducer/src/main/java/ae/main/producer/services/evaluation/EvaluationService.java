@@ -15,4 +15,8 @@ public interface EvaluationService {
     void getEvaluationDataByEvaluationAndPeriod(GetEvaluationDataByEvaluationAndPeriodDto dto, Authentication authentication);
 
     void getEvaluationResultById(GetCommodityGroupResultDto getDto, Authentication authentication);
+
+    void getEvaluationPrediction(GetCommodityGroupResultDto getDto, Authentication authentication);
+
+    void trainModel(EvaluationCreateDto evaluationDto, Authentication authentication);
 }

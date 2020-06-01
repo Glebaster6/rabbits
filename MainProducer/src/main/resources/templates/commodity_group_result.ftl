@@ -100,6 +100,15 @@
                                         </div>
                                         <hr/>
 
+                                        <div class="row">
+                                            <div class="col-sm-3 col-md-2 col-5">
+                                                <label style="font-weight:bold;">Прогноз объема продаж</label>
+                                            </div>
+                                            <div id="prediction" class="col-md-8 col-6">
+                                            </div>
+                                        </div>
+                                        <hr/>
+
                                     </div>
                                 </div>
                             </div>

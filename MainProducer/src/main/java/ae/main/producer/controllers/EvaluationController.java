@@ -42,15 +42,32 @@ public class EvaluationController {
     public String getEvaluationCreationPage(EvaluationCreateDto evaluationDto,
                                             Authentication authentication) {
         evaluationService.createEvaluation(evaluationDto, authentication);
-        return "redirect:/";
+        return "laoding";
+    }
+
+    @PostMapping("/train")
+    public String trainModel(EvaluationCreateDto evaluationDto,
+                             Authentication authentication) {
+        evaluationService.trainModel(evaluationDto, authentication);
+        return "laoding";
     }
 
     @GetMapping("/{facility_id}/delete/{evaluation_id}")
     public String deleteEvaluation(@PathVariable("facility_id") Long facilityId,
                                    @PathVariable("evaluation_id") Long evaluationId,
                                    Authentication authentication) {
-        if (authenticationService.getUserByAuthentication(authentication).getFacilityId() == facilityId) {
-            evaluationService.deleteEvaluation(DeleteEvaluationDto.builder().evaluationId(evaluationId).build());
+        if (authenticationService
+                .getUserByAuthentication(authentication)
+                .getFacilityId()
+                .equals(facilityId)) {
+
+            evaluationService.deleteEvaluation(
+                    DeleteEvaluationDto
+                            .builder()
+                            .evaluationId(evaluationId)
+                            .build()
+            );
+
         } else {
             return "redirect:/";
         }
@@ -104,11 +121,16 @@ public class EvaluationController {
                                              @PathVariable("evaluation_id") Long evaluationId,
                                              @PathVariable("period") Integer period,
                                              @PathVariable("evaluation_data_id") Long evaluationDataId,
-                                             Authentication authentication){
+                                             Authentication authentication) {
         evaluationService.getEvaluationResultById(GetCommodityGroupResultDto.builder()
                 .id(evaluationDataId)
                 .build(), authentication
         );
         return "commodity_group_result";
+    }
+
+    @GetMapping("/download_files")
+    public String downloadFilesPage() {
+        return "download_files";
     }
 }

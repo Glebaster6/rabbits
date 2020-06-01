@@ -19,7 +19,7 @@ public class AgregatorListener {
     public void listen(byte[] in) {
         MainDto mainDto = (MainDto) MainUtil.byteArrayToObject(in);
 
-        Thread.sleep(400);
+        Thread.sleep(600);
         simpMessagingTemplate.convertAndSendToUser(mainDto.getUser(), "/queue/notify", MainUtil.objectToJsonString(mainDto));
 
     }

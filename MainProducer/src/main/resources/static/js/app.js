@@ -36,6 +36,9 @@ function showValue(message) {
             fillCommodityGroupResultData(message.data)
             break;
         }
+        case 'RETURN_PREDICTION': {
+            fillPrediction(message.data)
+        }
     }
     $("#greetings").append("");
 }
@@ -123,7 +126,9 @@ function fillEvaluationDataByPeriod(value) {
             "                        </tr>");
     })
 }
-
+function fillPredictionData(value) {
+    document.getElementById("prediction").innerText = prediction
+}
 function fillCommodityGroupResultData(value) {
     document.getElementById("commodityGroupName").innerText = value.name;
     document.getElementById("profitAbc").innerText = value.abcProfitResult;
@@ -134,6 +139,14 @@ function fillCommodityGroupResultData(value) {
     document.getElementById("volumeOfSalesXyz").innerText = value.xyzVolumeOfSalesResult;
 
     drawStartChart(value)
+}
+
+function fillPrediction(value) {
+    document.getElementById("prediction").innerText = value
+}
+
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
 }
 
 function generateDate(value) {

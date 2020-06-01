@@ -81,6 +81,7 @@ public class EvaluationServiceImpl implements EvaluationService {
     }
 
     @Override
+    @SneakyThrows
     public void getEvaluationDataByEvaluationAndPeriod(GetEvaluationDataByEvaluationAndPeriodDto dto,
                                                        Authentication authentication){
         MainDto mainDto = MainDto.builder()
@@ -92,10 +93,37 @@ public class EvaluationServiceImpl implements EvaluationService {
         rabbitTemplate.convertAndSend("mainProducerToAgregatorQueue", MainUtil.objectToByteArray(mainDto));
     }
 
+    @Override
     public void getEvaluationResultById(GetCommodityGroupResultDto getDto, Authentication authentication){
         MainDto mainDto = MainDto.builder()
                 .action(MainDto.Action.GET_COMMODITY_GROUP_RESULT)
                 .json(MainUtil.objectToJsonString(getDto))
+                .user(authenticationService.getUserByAuthentication(authentication).getId())
+                .build();
+
+        rabbitTemplate.convertAndSend("mainProducerToAgregatorQueue", MainUtil.objectToByteArray(mainDto));
+
+    }
+
+    @SneakyThrows
+    @Override
+    public void getEvaluationPrediction(GetCommodityGroupResultDto getDto, Authentication authentication){
+        Thread.sleep(1000);
+        MainDto prediction = MainDto.builder()
+                .action(MainDto.Action.GET_PREDICTION)
+                .json(MainUtil.objectToJsonString(getDto))
+                .user(authenticationService.getUserByAuthentication(authentication).getId())
+                .build();
+
+        rabbitTemplate.convertAndSend("mainProducerToAgregatorQueue", MainUtil.objectToByteArray(prediction));
+    }
+
+    @Override
+    @SneakyThrows
+    public void trainModel(EvaluationCreateDto trainModelDto, Authentication authentication) {
+        MainDto mainDto = MainDto.builder()
+                .file(trainModelDto.getFile().getBytes())
+                .action(MainDto.Action.TRAIN_MODEL)
                 .user(authenticationService.getUserByAuthentication(authentication).getId())
                 .build();
 
