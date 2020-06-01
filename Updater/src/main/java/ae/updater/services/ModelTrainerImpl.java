@@ -119,7 +119,7 @@ public class ModelTrainerImpl implements ModelTrainer {
             model.fit(trainingData);
         }
 
-        String modelPath = "src/main/resources/temp/model_"+ mainDto.getUser() +".json";
+        String modelPath = "src/main/resources/temp/model_"+ mainDto.getUser() +".ser";
         File file = new File(modelPath);
         ModelSerializer.writeModel(model, file, true);
 
@@ -135,7 +135,7 @@ public class ModelTrainerImpl implements ModelTrainer {
                 .file(mainDto.getFile())
                 .build();
 
-        rabbitTemplate.convertAndSend("updaterToFileStorage", MainUtil.objectToByteArray(result));
-        rabbitTemplate.convertAndSend("updaterToFileStorage", MainUtil.objectToByteArray(dataset));
+        rabbitTemplate.convertAndSend("updaterToFileStorageQueue", MainUtil.objectToByteArray(result));
+        rabbitTemplate.convertAndSend("updaterToFileStorageQueue", MainUtil.objectToByteArray(dataset));
     }
 }
